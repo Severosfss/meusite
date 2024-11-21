@@ -21,6 +21,13 @@ const totalPagesSpan = document.getElementById('totalPages');
 let currentCategory = 'tech';
 let currentFilter = 'all';
 let currentPage = 1;
+
+    
+// Inicializar links quando a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+    loadVideos(currentCategory);
+});
+
 let totalPages = 1;
 let pageToken = '';
 let nextPageToken = '';
@@ -363,48 +370,4 @@ function changeCategory(category) {
     const language = document.querySelector('.language-button.active')?.dataset.language || 'all';
     
     loadVideos(category, filter, language);
-    
-    // Recarregar anúncios ao mudar de categoria
-    setTimeout(initializeAds, 1000);
 }
-
-// Configuração do Google AdSense
-function initializeAds() {
-    const adElements = document.querySelectorAll('.adsbygoogle');
-    adElements.forEach(ad => {
-        try {
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-            console.error('Erro ao carregar anúncio:', e);
-        }
-    });
-}
-
-// Inicializar anúncios quando a página carregar
-window.addEventListener('load', initializeAds);
-
-// Lógica de Doação
-document.querySelector('.support-button.donate').addEventListener('click', function(e) {
-    e.preventDefault();
-    // Aqui você pode integrar com PayPal, PicPay, etc.
-    alert('Em breve você poderá fazer uma doação para apoiar nosso trabalho!');
-});
-
-// Links de Afiliados
-document.querySelectorAll('.affiliate-card').forEach(card => {
-    card.addEventListener('click', function(e) {
-        const platform = this.querySelector('h3').textContent;
-        // Adicione seus links de afiliado aqui
-        switch(platform) {
-            case 'Udemy':
-                this.href = 'https://www.udemy.com/affiliate-link';
-                break;
-            case 'Amazon':
-                this.href = 'https://www.amazon.com.br/affiliate-link';
-                break;
-            case 'DigitalOcean':
-                this.href = 'https://www.digitalocean.com/affiliate-link';
-                break;
-        }
-    });
-});
