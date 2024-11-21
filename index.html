@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechAI News</title>
+    <title>TechAI News - Portal de Tecnologia</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2418561224758452"
+     crossorigin="anonymous"></script>
 </head>
 <body>
     <header class="main-header">
@@ -16,7 +20,7 @@
                 TechAI News
             </div>
             <div class="nav-links">
-                <a href="#" class="active" data-category="technology">
+                <a href="#" class="active" data-category="tech">
                     <i class="fas fa-laptop-code"></i>
                     Tecnologia
                 </a>
@@ -24,34 +28,179 @@
                     <i class="fas fa-brain"></i>
                     Inteligência Artificial
                 </a>
-                <a href="#" data-category="videos">
-                    <i class="fas fa-play-circle"></i>
-                    Vídeos
+                <a href="#" data-category="games">
+                    <i class="fas fa-gamepad"></i>
+                    Games
+                </a>
+                <a href="#" data-category="innovation">
+                    <i class="fas fa-rocket"></i>
+                    Inovação
+                </a>
+                <a href="#" data-category="programming">
+                    <i class="fas fa-code"></i>
+                    Aulas de Programação
                 </a>
             </div>
         </nav>
     </header>
 
     <main>
-        <div class="page-header">
-            <h1 class="section-title">Últimas Notícias</h1>
-            <div class="category-description">Fique por dentro das últimas novidades do mundo da tecnologia</div>
+        <!-- Anúncio Principal -->
+        <div class="ad-container top-ad">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-2418561224758452"
+                data-ad-slot="AUTO"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
         </div>
 
-        <div class="news-container" id="newsContainer">
-            <!-- As notícias serão inseridas aqui dinamicamente -->
+        <section class="page-header">
+            <h1 class="section-title">Notícias em Vídeo sobre Tecnologia</h1>
+            <p class="category-description">Fique por dentro das últimas novidades do mundo tech através dos melhores vídeos</p>
+        </section>
+
+        <div class="category-filters">
+            <button class="filter-button active" data-filter="all">
+                <i class="fas fa-globe"></i>
+                Todos
+            </button>
+            <button class="filter-button" data-filter="beginner">
+                <i class="fas fa-graduation-cap"></i>
+                Iniciante
+            </button>
+            <button class="filter-button" data-filter="intermediate">
+                <i class="fas fa-user-graduate"></i>
+                Intermediário
+            </button>
+            <button class="filter-button" data-filter="advanced">
+                <i class="fas fa-award"></i>
+                Avançado
+            </button>
+            <button class="filter-button" data-filter="news">
+                <i class="fas fa-newspaper"></i>
+                Notícias
+            </button>
+            <button class="filter-button" data-filter="tutorials">
+                <i class="fas fa-chalkboard-teacher"></i>
+                Tutoriais
+            </button>
         </div>
-        <div class="videos-container" id="videosContainer" style="display: none;">
-            <!-- Os vídeos serão inseridos aqui dinamicamente -->
+
+        <div class="language-filters">
+            <button class="language-button active" data-language="all">
+                <i class="fas fa-code"></i>
+                Todas
+            </button>
+            <button class="language-button" data-language="javascript">
+                <i class="fab fa-js"></i>
+                JavaScript
+            </button>
+            <button class="language-button" data-language="python">
+                <i class="fab fa-python"></i>
+                Python
+            </button>
+            <button class="language-button" data-language="java">
+                <i class="fab fa-java"></i>
+                Java
+            </button>
+            <button class="language-button" data-language="csharp">
+                <i class="fas fa-hashtag"></i>
+                C#
+            </button>
+            <button class="language-button" data-language="web">
+                <i class="fas fa-globe"></i>
+                Web
+            </button>
         </div>
+
+        <!-- Anúncio Lateral -->
+        <div class="ad-container sidebar-ad">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-2418561224758452"
+                data-ad-slot="AUTO"
+                data-ad-format="vertical"
+                data-full-width-responsive="false"></ins>
+        </div>
+
+        <div class="ad-container">
+            <div class="ad-slot" id="sidebar-ad">
+                <!-- Google AdSense será inserido aqui -->
+                <div class="ad-placeholder">Anúncio</div>
+            </div>
+        </div>
+
+        <section class="support-section">
+            <h2>Apoie Nosso Trabalho</h2>
+            <p>Ajude-nos a continuar fornecendo conteúdo gratuito de qualidade</p>
+            <div class="support-options">
+                <a href="#" class="support-button donate">
+                    <i class="fas fa-heart"></i>
+                    Fazer Doação
+                </a>
+            </div>
+        </section>
+
+        <div id="videos-container" class="videos-container">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                Carregando vídeos...
+            </div>
+        </div>
+
+        <!-- Anúncio Entre os Vídeos -->
+        <div class="ad-container content-ad">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-2418561224758452"
+                data-ad-slot="AUTO"
+                data-ad-format="horizontal"
+                data-full-width-responsive="true"></ins>
+        </div>
+
+        <div class="pagination">
+            <button class="pagination-button" id="prevPage" disabled>
+                <i class="fas fa-chevron-left"></i>
+                Anterior
+            </button>
+            <div class="page-info">
+                Página <span id="currentPage">1</span> de <span id="totalPages">1</span>
+            </div>
+            <button class="pagination-button" id="nextPage">
+                Próxima
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <section class="affiliate-section">
+            <h2>Recursos Recomendados</h2>
+            <div class="affiliate-grid">
+                <a href="#" class="affiliate-card" target="_blank">
+                    <i class="fas fa-laptop-code"></i>
+                    <h3>Udemy</h3>
+                    <p>Cursos com até 90% de desconto</p>
+                </a>
+                <a href="#" class="affiliate-card" target="_blank">
+                    <i class="fas fa-book"></i>
+                    <h3>Amazon</h3>
+                    <p>Livros técnicos recomendados</p>
+                </a>
+                <a href="#" class="affiliate-card" target="_blank">
+                    <i class="fas fa-cloud"></i>
+                    <h3>DigitalOcean</h3>
+                    <p>Hospedagem para seus projetos</p>
+                </a>
+            </div>
+        </section>
     </main>
 
-    <div id="newsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">
-                <i class="fas fa-times"></i>
-            </span>
-            <div id="modalContent"></div>
+    <div id="video-modal" class="modal">
+        <div class="video-modal-content">
+            <span class="close-button">&times;</span>
+            <div class="video-wrapper" id="video-wrapper">
+                <!-- O iframe do YouTube será inserido aqui -->
+            </div>
         </div>
     </div>
 
@@ -61,17 +210,16 @@
                 <i class="fas fa-microchip"></i>
                 TechAI News
             </div>
-            <div class="footer-text">
-                Seu portal de notícias sobre Tecnologia e IA
-            </div>
+            <p class="footer-text">Seu portal de tecnologia e programação</p>
             <div class="footer-social">
+                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
                 <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
                 <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
             </div>
-        </div>
-        <div class="footer-bottom">
-            2024 TechAI News - Todas as notícias sobre Tecnologia e IA
+            <div class="footer-bottom">
+                &copy; 2024 TechAI News. Todos os direitos reservados.
+            </div>
         </div>
     </footer>
 

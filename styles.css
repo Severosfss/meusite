@@ -56,6 +56,7 @@ nav {
 .nav-links {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .nav-links a {
@@ -67,6 +68,10 @@ nav {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex: 1;
+    min-width: 200px;
+    justify-content: center;
+    white-space: nowrap;
 }
 
 .nav-links a i {
@@ -310,6 +315,392 @@ main {
     color: white;
 }
 
+/* Pagination Styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 2rem 0;
+    padding: 1rem;
+}
+
+.pagination-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.pagination-button:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pagination-button i {
+    font-size: 0.9rem;
+}
+
+.page-info {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.page-info span {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Category Filters */
+.category-filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    padding: 0 1rem;
+}
+
+.filter-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: white;
+    color: var(--text-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.filter-button i {
+    font-size: 1.1rem;
+}
+
+.filter-button:hover,
+.filter-button.active {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Language Filters */
+.language-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 1200px;
+    padding: 0 20px;
+    justify-content: center;
+}
+
+.language-button {
+    background: linear-gradient(145deg, #2a2a2a, #3a3a3a);
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.language-button i {
+    font-size: 16px;
+}
+
+.language-button:hover {
+    background: linear-gradient(145deg, #3a3a3a, #4a4a4a);
+    transform: translateY(-2px);
+}
+
+.language-button.active {
+    background: linear-gradient(145deg, #007bff, #0056b3);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+/* Level Filters */
+.level-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 1200px;
+    padding: 0 20px;
+    justify-content: center;
+}
+
+.level-button {
+    background: linear-gradient(145deg, #2a2a2a, #3a3a3a);
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.level-button i {
+    font-size: 16px;
+}
+
+.level-button:hover {
+    background: linear-gradient(145deg, #3a3a3a, #4a4a4a);
+    transform: translateY(-2px);
+}
+
+.level-button.active {
+    background: linear-gradient(145deg, #007bff, #0056b3);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+    .language-filters {
+        gap: 8px;
+        padding: 0 10px;
+    }
+
+    .language-button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .level-filters {
+        gap: 8px;
+        padding: 0 10px;
+    }
+
+    .level-button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+/* Containers de Anúncios */
+.ad-container {
+    margin: 20px auto;
+    text-align: center;
+    overflow: hidden;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+/* Anúncio Principal (Topo) */
+.top-ad {
+    max-width: 1200px;
+    min-height: 90px;
+    margin-top: 0;
+}
+
+/* Anúncio Lateral */
+.sidebar-ad {
+    width: 300px;
+    min-height: 600px;
+    float: right;
+    margin: 0 0 20px 20px;
+}
+
+/* Anúncio no Conteúdo */
+.content-ad {
+    max-width: 728px;
+    min-height: 90px;
+    margin: 30px auto;
+    clear: both;
+}
+
+/* Responsividade dos Anúncios */
+@media (max-width: 1200px) {
+    .top-ad {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar-ad {
+        float: none;
+        width: 100%;
+        min-height: 250px;
+        margin: 20px auto;
+    }
+
+    .content-ad {
+        min-height: 250px;
+    }
+}
+
+/* Placeholder para Anúncios (Durante Carregamento) */
+.ad-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    color: #999;
+    font-size: 14px;
+    padding: 20px;
+    border-radius: 8px;
+    min-height: 90px;
+}
+
+/* Área de Anúncios */
+.ad-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.ad-slot {
+    width: 100%;
+    min-height: 250px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.ad-placeholder {
+    color: #999;
+    font-size: 14px;
+}
+
+/* Seção de Apoio */
+.support-section {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    color: #fff;
+}
+
+.support-section h2 {
+    margin-bottom: 15px;
+}
+
+.support-section p {
+    margin-bottom: 30px;
+    color: #ccc;
+}
+
+.support-options {
+    display: flex;
+    justify-content: center;
+}
+
+.support-button {
+    padding: 15px 40px;
+    border-radius: 25px;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s ease;
+    font-size: 1.1em;
+}
+
+.support-button:hover {
+    transform: translateY(-3px);
+}
+
+.support-button.donate {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.support-button.donate:hover {
+    background: linear-gradient(135deg, #ff4757, #ff6b6b);
+}
+
+/* Links de Afiliados */
+.affiliate-section {
+    padding: 40px 20px;
+    background: #fff;
+}
+
+.affiliate-section h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.affiliate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.affiliate-card {
+    text-align: center;
+    padding: 30px;
+    border-radius: 15px;
+    background: #f8f9fa;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.affiliate-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.affiliate-card i {
+    font-size: 40px;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.affiliate-card h3 {
+    margin-bottom: 10px;
+}
+
+.affiliate-card p {
+    color: #666;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .affiliate-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .support-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 /* Footer */
 footer {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -448,6 +839,16 @@ footer {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .nav-links {
+        justify-content: center;
+    }
+    
+    .nav-links a {
+        min-width: 180px;
+    }
+}
+
 @media (max-width: 768px) {
     nav {
         flex-direction: column;
@@ -476,5 +877,14 @@ footer {
 
     .footer-content {
         gap: 1.5rem;
+    }
+
+    .category-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-button {
+        justify-content: center;
     }
 }

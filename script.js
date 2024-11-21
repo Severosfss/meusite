@@ -1,296 +1,410 @@
-// Configuração da API de notícias (usando NewsAPI)
-const API_KEY = 'fd5564769ad1452f973334158769bf9c'; // Substitua com sua chave da API
-const BASE_URL = 'https://newsapi.org/v2/everything';
-
-// Estado atual da categoria selecionada
-let currentCategory = 'technology';
+// Configuração da API do YouTube
+const YOUTUBE_API_KEY = 'AIzaSyA3bjXPkJ6VesGq64sodSXQwL-XfYtDOok';
+const RESULTS_PER_PAGE = 12;
+const MAX_RESULTS = 50;
 
 // Elementos do DOM
-const newsContainer = document.getElementById('newsContainer');
-const navLinks = document.querySelectorAll('.nav-links a');
-const modal = document.getElementById('newsModal');
-const modalContent = document.getElementById('modalContent');
+const videosContainer = document.getElementById('videos-container');
+const videoModal = document.getElementById('video-modal');
+const videoWrapper = document.getElementById('video-wrapper');
 const closeButton = document.querySelector('.close-button');
-const videosContainer = document.getElementById('videosContainer');
+const navLinks = document.querySelectorAll('.nav-links a');
+const filterButtons = document.querySelectorAll('.filter-button');
+const sectionTitle = document.querySelector('.section-title');
+const categoryDescription = document.querySelector('.category-description');
+const prevPageButton = document.getElementById('prevPage');
+const nextPageButton = document.getElementById('nextPage');
+const currentPageSpan = document.getElementById('currentPage');
+const totalPagesSpan = document.getElementById('totalPages');
 
-// Adicionar eventos aos links de navegação
+// Estado atual
+let currentCategory = 'tech';
+let currentFilter = 'all';
+let currentPage = 1;
+let totalPages = 1;
+let pageToken = '';
+let nextPageToken = '';
+let prevPageToken = '';
+let cachedVideos = {};
+
+// Categorias
+const CATEGORIES = {
+    tech: {
+        title: 'Notícias em Vídeo sobre Tecnologia',
+        description: 'Fique por dentro das últimas novidades do mundo tech através dos melhores vídeos',
+        searchQuery: 'tecnologia noticias portugues'
+    },
+    ai: {
+        title: 'Inteligência Artificial',
+        description: 'Descubra as últimas inovações em IA e Machine Learning',
+        searchQuery: 'inteligencia artificial noticias portugues'
+    },
+    games: {
+        title: 'Desenvolvimento de Games',
+        description: 'Novidades e tutoriais sobre desenvolvimento de jogos',
+        searchQuery: 'desenvolvimento jogos games portugues'
+    },
+    innovation: {
+        title: 'Inovação Tecnológica',
+        description: 'As últimas tendências e inovações em tecnologia',
+        searchQuery: 'inovacao tecnologia noticias portugues'
+    },
+    programming: {
+        title: 'Aulas de Programação',
+        description: 'Aprenda programação com os melhores tutoriais',
+        searchQuery: 'aulas programacao tutorial portugues'
+    }
+};
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    loadVideos(currentCategory);
+});
+
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
-        const category = e.target.dataset.category;
-        currentCategory = category;
+        const category = e.target.closest('a').dataset.category;
         
-        // Atualizar classe ativa
         navLinks.forEach(l => l.classList.remove('active'));
-        e.target.classList.add('active');
+        e.target.closest('a').classList.add('active');
         
-        // Mostrar container apropriado
-        if (category === 'videos') {
-            newsContainer.style.display = 'none';
-            videosContainer.style.display = 'grid';
-            fetchVideos();
-        } else {
-            newsContainer.style.display = 'grid';
-            videosContainer.style.display = 'none';
-            fetchNews(category);
-        }
-    });
-});
-
-// Fechar modal quando clicar no X
-closeButton.addEventListener('click', () => {
-    modal.style.display = 'none';
-    modalContent.innerHTML = '';
-});
-
-// Fechar modal quando clicar fora dele
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        modal.style.display = 'none';
-        modalContent.innerHTML = '';
-    }
-});
-
-// Função para buscar notícias
-async function fetchNews(category) {
-    try {
-        const query = category === 'technology' ? 'technology' : 'artificial intelligence';
-        const url = `${BASE_URL}?q=${query}&language=pt&sortBy=publishedAt&apiKey=${API_KEY}`;
+        currentCategory = category;
+        currentPage = 1;
+        pageToken = '';
+        currentFilter = 'all';
         
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        if (data.status === 'ok') {
-            displayNews(data.articles);
-        } else {
-            throw new Error('Erro ao buscar notícias');
-        }
-    } catch (error) {
-        console.error('Erro:', error);
-        newsContainer.innerHTML = `
-            <div class="error-message">
-                <p>Desculpe, não foi possível carregar as notícias. Tente novamente mais tarde.</p>
-            </div>
-        `;
-    }
-}
-
-// Função para buscar o conteúdo completo da notícia
-async function fetchFullArticle(url) {
-    try {
-        const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
-        const data = await response.json();
-        return data.contents;
-    } catch (error) {
-        console.error('Erro ao buscar artigo completo:', error);
-        return null;
-    }
-}
-
-// Função para extrair o conteúdo principal do HTML
-function extractMainContent(html) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    
-    // Remove scripts e estilos
-    doc.querySelectorAll('script, style').forEach(el => el.remove());
-    
-    // Tenta encontrar o conteúdo principal
-    const mainContent = doc.querySelector('article') || 
-                       doc.querySelector('.article-content') || 
-                       doc.querySelector('.post-content') ||
-                       doc.querySelector('main') ||
-                       doc.body;
-    
-    return mainContent.innerHTML;
-}
-
-// Função para exibir notícia no modal
-async function showNewsInModal(article) {
-    // Mostrar loading
-    modalContent.innerHTML = '<div class="loading">Carregando notícia...</div>';
-    modal.style.display = 'block';
-
-    const publishedDate = new Date(article.publishedAt).toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-
-    let fullContent = article.content || article.description || '';
-    
-    // Tenta buscar o conteúdo completo
-    const articleContent = await fetchFullArticle(article.url);
-    if (articleContent) {
-        try {
-            fullContent = extractMainContent(articleContent);
-        } catch (error) {
-            console.error('Erro ao processar conteúdo:', error);
-        }
-    }
-
-    modalContent.innerHTML = `
-        <div class="modal-news-content">
-            <img src="${article.urlToImage || 'https://via.placeholder.com/800x400?text=Sem+Imagem'}" 
-                 alt="${article.title}" 
-                 class="modal-news-image"
-                 onerror="this.src='https://via.placeholder.com/800x400?text=Erro+ao+carregar+imagem'">
-            <h2 class="modal-news-title">${article.title}</h2>
-            <div class="modal-news-meta">
-                <span>Fonte: ${article.source.name}</span> | 
-                <span>Publicado em: ${publishedDate}</span>
-            </div>
-            <div class="modal-news-description">
-                ${fullContent}
-            </div>
-            <div class="modal-news-footer">
-                <a href="${article.url}" target="_blank" class="source-link">Ver notícia original</a>
-            </div>
-        </div>
-    `;
-}
-
-// Função para exibir as notícias
-function displayNews(articles) {
-    newsContainer.innerHTML = '';
-    
-    articles.forEach(article => {
-        const card = document.createElement('div');
-        card.className = 'news-card';
-        
-        const image = article.urlToImage || 'https://via.placeholder.com/300x200?text=Sem+Imagem';
-        const title = article.title || 'Sem título';
-        const description = article.description || 'Sem descrição';
-        const source = article.source.name || 'Fonte desconhecida';
-        
-        card.innerHTML = `
-            <img src="${image}" alt="${title}" class="news-image" onerror="this.src='https://via.placeholder.com/300x200?text=Erro+ao+carregar+imagem'">
-            <div class="news-content">
-                <h3 class="news-title">${title}</h3>
-                <p class="news-description">${description}</p>
-                <p class="news-source">Fonte: ${source}</p>
-                <button class="news-link">Ler mais</button>
-            </div>
-        `;
-        
-        // Adicionar evento de clique no card
-        card.querySelector('.news-link').addEventListener('click', () => {
-            showNewsInModal(article);
+        // Reset filter buttons
+        filterButtons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.filter === 'all') {
+                btn.classList.add('active');
+            }
         });
         
-        newsContainer.appendChild(card);
+        updatePageHeader(category);
+        loadVideos(category);
     });
-}
+});
 
-// Configuração da API do YouTube
-const YOUTUBE_API_KEY = 'AIzaSyA3bjXPkJ6VesGq64sodSXQwL-XfYtDOok';
-const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3';
+filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        currentFilter = button.dataset.filter;
+        currentPage = 1;
+        pageToken = '';
+        loadVideos(currentCategory);
+    });
+});
 
-// Função para buscar vídeos do YouTube
-async function fetchVideos() {
+prevPageButton.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        pageToken = prevPageToken;
+        loadVideos(currentCategory);
+    }
+});
+
+nextPageButton.addEventListener('click', () => {
+    if (currentPage < totalPages) {
+        currentPage++;
+        pageToken = nextPageToken;
+        loadVideos(currentCategory);
+    }
+});
+
+closeButton.addEventListener('click', () => {
+    closeVideoModal();
+});
+
+videoModal.addEventListener('click', (e) => {
+    if (e.target === videoModal) {
+        closeVideoModal();
+    }
+});
+
+// Event Listeners para os filtros de linguagem
+document.querySelectorAll('.language-button').forEach(button => {
+    button.addEventListener('click', () => {
+        document.querySelectorAll('.language-button').forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+        
+        const language = button.dataset.language;
+        const category = document.querySelector('.nav-links a.active').dataset.category;
+        const filter = document.querySelector('.filter-button.active').dataset.filter;
+        
+        currentPageToken = '';
+        loadVideos(category, filter, language);
+    });
+});
+
+// Funções principais
+async function loadVideos(category, filter = 'all', language = 'all') {
+    showLoading();
+    
     try {
-        const query = 'tecnologia|inteligencia artificial|tech news';
-        const url = `${YOUTUBE_API_URL}/search?part=snippet&q=${query}&type=video&order=date&maxResults=12&relevanceLanguage=pt&key=${YOUTUBE_API_KEY}`;
-        
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        if (data.items) {
-            displayVideos(data.items);
+        const cacheKey = `${category}_${filter}_${language}_${pageToken}`;
+        let videos;
+
+        if (cachedVideos[cacheKey]) {
+            videos = cachedVideos[cacheKey];
         } else {
-            throw new Error('Erro ao buscar vídeos');
+            const searchQuery = getSearchQueryForCategory(category, filter, language);
+            const data = await fetchYouTubeVideos(searchQuery);
+            videos = data.items;
+            nextPageToken = data.nextPageToken || '';
+            prevPageToken = data.prevPageToken || '';
+            
+            cachedVideos[cacheKey] = videos;
         }
+
+        updatePagination();
+        displayVideos(videos);
     } catch (error) {
-        console.error('Erro:', error);
-        videosContainer.innerHTML = `
-            <div class="error-message">
-                <p>Desculpe, não foi possível carregar os vídeos. Tente novamente mais tarde.</p>
-            </div>
-        `;
+        console.error('Erro ao carregar vídeos:', error);
+        showError();
     }
 }
 
-// Função para exibir os vídeos
+function getSearchQueryForCategory(category, filter = 'all', language = 'all') {
+    let baseQuery = CATEGORIES[category].searchQuery;
+    
+    if (category === 'programming') {
+        baseQuery = 'aulas curso programacao';
+        
+        if (language !== 'all') {
+            baseQuery += ` ${language}`;
+        }
+        
+        switch(filter) {
+            case 'beginner':
+                baseQuery += ' iniciante básico';
+                break;
+            case 'intermediate':
+                baseQuery += ' intermediário';
+                break;
+            case 'advanced':
+                baseQuery += ' avançado';
+                break;
+            case 'tutorials':
+                baseQuery += ' tutorial';
+                break;
+            case 'news':
+                baseQuery += ' novidades atualizações';
+                break;
+        }
+    } else {
+        switch(filter) {
+            case 'news':
+                baseQuery += ' notícias';
+                break;
+            case 'tutorials':
+                baseQuery += ' tutorial';
+                break;
+            case 'reviews':
+                baseQuery += ' review análise';
+                break;
+        }
+    }
+    
+    return baseQuery + ' portugues';
+}
+
+async function fetchYouTubeVideos(query) {
+    let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=${RESULTS_PER_PAGE}&relevanceLanguage=pt&key=${YOUTUBE_API_KEY}`;
+    
+    if (pageToken) {
+        url += `&pageToken=${pageToken}`;
+    }
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error('Erro ao buscar vídeos do YouTube');
+    }
+    
+    const data = await response.json();
+    totalPages = Math.min(Math.ceil(MAX_RESULTS / RESULTS_PER_PAGE), 5);
+    
+    return data;
+}
+
+function updatePagination() {
+    currentPageSpan.textContent = currentPage;
+    totalPagesSpan.textContent = totalPages;
+    
+    prevPageButton.disabled = currentPage === 1;
+    nextPageButton.disabled = currentPage === totalPages || !nextPageToken;
+}
+
 function displayVideos(videos) {
     videosContainer.innerHTML = '';
     
+    if (!videos || videos.length === 0) {
+        showError('Nenhum vídeo encontrado');
+        return;
+    }
+    
     videos.forEach(video => {
-        const card = document.createElement('div');
-        card.className = 'video-card';
-        
-        const publishedDate = new Date(video.snippet.publishedAt).toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
-        
-        card.innerHTML = `
-            <div class="video-thumbnail">
-                <img src="${video.snippet.thumbnails.high.url}" alt="${video.snippet.title}">
-                <div class="video-play-button"></div>
-            </div>
-            <div class="video-content">
-                <h3 class="video-title">${video.snippet.title}</h3>
-                <p class="video-channel">${video.snippet.channelTitle}</p>
-                <p class="video-date">${publishedDate}</p>
-            </div>
-        `;
-        
-        // Adicionar evento de clique para abrir o vídeo
-        card.addEventListener('click', () => {
-            showVideoInModal(video.id.videoId);
-        });
-        
-        videosContainer.appendChild(card);
+        const videoCard = createVideoCard(video);
+        videosContainer.appendChild(videoCard);
     });
 }
 
-// Função para mostrar vídeo no modal
-function showVideoInModal(videoId) {
-    modalContent.innerHTML = `
-        <div class="video-modal-content">
-            <div class="video-wrapper">
-                <iframe
-                    src="https://www.youtube.com/embed/${videoId}?autoplay=1"
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                ></iframe>
-            </div>
+function createVideoCard(video) {
+    const card = document.createElement('div');
+    card.className = 'video-card';
+    card.innerHTML = `
+        <div class="video-thumbnail">
+            <img src="${video.snippet.thumbnails.high.url}" alt="${video.snippet.title}">
+            <div class="video-play-button"></div>
+        </div>
+        <div class="video-content">
+            <h3 class="video-title">${video.snippet.title}</h3>
+            <div class="video-channel">${video.snippet.channelTitle}</div>
+            <div class="video-date">${formatDate(video.snippet.publishedAt)}</div>
         </div>
     `;
     
-    modal.style.display = 'block';
-}
-
-// Cache das notícias
-const newsCache = {
-    technology: null,
-    ai: null,
-    timestamp: null
-};
-
-// Função para verificar se o cache está válido (30 minutos)
-function isCacheValid() {
-    if (!newsCache.timestamp) return false;
-    const thirtyMinutes = 30 * 60 * 1000;
-    return (Date.now() - newsCache.timestamp) < thirtyMinutes;
-}
-
-// Função para atualizar o cache
-function updateCache(category, articles) {
-    newsCache[category] = articles;
-    newsCache.timestamp = Date.now();
-}
-
-// Inicializar o site
-document.addEventListener('DOMContentLoaded', () => {
-    fetchNews(currentCategory);
+    card.addEventListener('click', () => {
+        openVideoModal(video.id.videoId);
+    });
     
-    // Atualizar notícias a cada 30 minutos
-    setInterval(() => {
-        fetchNews(currentCategory);
-    }, 30 * 60 * 1000);
+    return card;
+}
+
+function openVideoModal(videoId) {
+    videoWrapper.innerHTML = `
+        <iframe
+            width="100%"
+            height="100%"
+            src="https://www.youtube.com/embed/${videoId}?autoplay=1"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    `;
+    videoModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeVideoModal() {
+    videoModal.style.display = 'none';
+    videoWrapper.innerHTML = '';
+    document.body.style.overflow = 'auto';
+}
+
+function updatePageHeader(category) {
+    const title = CATEGORIES[category].title;
+    const description = CATEGORIES[category].description;
+    
+    sectionTitle.textContent = title;
+    categoryDescription.textContent = description;
+}
+
+function showLoading() {
+    videosContainer.innerHTML = `
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            Carregando vídeos...
+        </div>
+    `;
+}
+
+function showError(message = 'Erro ao carregar os vídeos. Por favor, tente novamente.') {
+    videosContainer.innerHTML = `
+        <div class="error">
+            <i class="fas fa-exclamation-circle"></i>
+            <p>${message}</p>
+        </div>
+    `;
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+}
+
+// Atualizar a visibilidade dos filtros baseado na categoria
+function updateFiltersVisibility(category) {
+    const languageFilters = document.querySelector('.language-filters');
+    if (category === 'programming') {
+        languageFilters.style.display = 'flex';
+    } else {
+        languageFilters.style.display = 'none';
+    }
+}
+
+// Adicionar ao changeCategory
+function changeCategory(category) {
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.classList.remove('active');
+        if (link.dataset.category === category) {
+            link.classList.add('active');
+        }
+    });
+
+    updateFiltersVisibility(category);
+    
+    const title = CATEGORIES[category].title;
+    const description = CATEGORIES[category].description;
+    
+    document.querySelector('.section-title').textContent = title;
+    document.querySelector('.category-description').textContent = description;
+    
+    currentPageToken = '';
+    const filter = document.querySelector('.filter-button.active').dataset.filter;
+    const language = document.querySelector('.language-button.active')?.dataset.language || 'all';
+    
+    loadVideos(category, filter, language);
+    
+    // Recarregar anúncios ao mudar de categoria
+    setTimeout(initializeAds, 1000);
+}
+
+// Configuração do Google AdSense
+function initializeAds() {
+    const adElements = document.querySelectorAll('.adsbygoogle');
+    adElements.forEach(ad => {
+        try {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+            console.error('Erro ao carregar anúncio:', e);
+        }
+    });
+}
+
+// Inicializar anúncios quando a página carregar
+window.addEventListener('load', initializeAds);
+
+// Lógica de Doação
+document.querySelector('.support-button.donate').addEventListener('click', function(e) {
+    e.preventDefault();
+    // Aqui você pode integrar com PayPal, PicPay, etc.
+    alert('Em breve você poderá fazer uma doação para apoiar nosso trabalho!');
+});
+
+// Links de Afiliados
+document.querySelectorAll('.affiliate-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+        const platform = this.querySelector('h3').textContent;
+        // Adicione seus links de afiliado aqui
+        switch(platform) {
+            case 'Udemy':
+                this.href = 'https://www.udemy.com/affiliate-link';
+                break;
+            case 'Amazon':
+                this.href = 'https://www.amazon.com.br/affiliate-link';
+                break;
+            case 'DigitalOcean':
+                this.href = 'https://www.digitalocean.com/affiliate-link';
+                break;
+        }
+    });
 });
