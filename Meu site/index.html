@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Meu primeiro site - Aprendendo desenvolvimento web">
+    <title>Meu Site</title>
+    <link href="styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Meu Site</div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+            <div class="menu-btn">
+                <div class="menu-btn__burger"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="inicio" class="hero-section">
+            <div class="hero-content">
+                <h1 class="animate-on-scroll">Bem-vindo ao Meu Site</h1>
+                <p class="hero-text animate-on-scroll">Este é meu primeiro projeto de desenvolvimento web</p>
+                <button class="cta-button animate-on-scroll">Saiba Mais</button>
+            </div>
+        </section>
+
+        <section id="sobre" class="content-section">
+            <h2 class="animate-on-scroll">Sobre</h2>
+            <div class="cards-container">
+                <div class="card animate-on-scroll">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Missão</h3>
+                    <p>Criar experiências web incríveis</p>
+                </div>
+                <div class="card animate-on-scroll">
+                    <i class="fas fa-eye"></i>
+                    <h3>Visão</h3>
+                    <p>Ser referência em desenvolvimento web</p>
+                </div>
+                <div class="card animate-on-scroll">
+                    <i class="fas fa-heart"></i>
+                    <h3>Valores</h3>
+                    <p>Qualidade, inovação e dedicação</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="servicos" class="content-section">
+            <h2 class="animate-on-scroll">Nossos Serviços</h2>
+            <div class="services-slider">
+                <div class="service-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Desenvolvimento Web</h3>
+                    <p>Sites modernos e responsivos</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Design Responsivo</h3>
+                    <p>Adaptável a todos os dispositivos</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-search"></i>
+                    <h3>SEO</h3>
+                    <p>Otimização para buscadores</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contato" class="content-section">
+            <h2 class="animate-on-scroll">Entre em Contato</h2>
+            <form class="contact-form" id="contactForm" action="https://formspree.io/f/xjkvoade" method="POST">
+                <div class="form-group">
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+                    <span class="form-feedback"></span>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="Seu email" required>
+                    <span class="form-feedback"></span>
+                </div>
+                <div class="form-group">
+                    <textarea id="mensagem" name="mensagem" placeholder="Sua mensagem" required></textarea>
+                    <span class="form-feedback"></span>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <span class="btn-text">Enviar</span>
+                    <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <p>&copy; 2024 Meu Site. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
