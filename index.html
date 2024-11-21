@@ -1,175 +1,77 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Meu primeiro site - Aprendendo desenvolvimento web">
-    <title>Meu Site</title>
-    <link href="styles.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-7812RGG91Y"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-7812RGG91Y');
-  
-</script>
+    <title>TechAI News</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="logo">Meu Site</div>
-            <ul class="nav-links">
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="#sobre">Sobre</a></li>
-                <li><a href="#servicos">Serviços</a></li>
-                <li><a href="#entretenimento">Diversão</a></li>
-                <li><a href="#contato">Contato</a></li>
-                <li><a href="cadastro.html">Cadastro</a></li>
-            </ul>
-            <div class="menu-btn">
-                <div class="menu-btn__burger"></div>
+    <header class="main-header">
+        <nav>
+            <div class="logo">
+                <i class="fas fa-microchip"></i>
+                TechAI News
+            </div>
+            <div class="nav-links">
+                <a href="#" class="active" data-category="technology">
+                    <i class="fas fa-laptop-code"></i>
+                    Tecnologia
+                </a>
+                <a href="#" data-category="ai">
+                    <i class="fas fa-brain"></i>
+                    Inteligência Artificial
+                </a>
+                <a href="#" data-category="videos">
+                    <i class="fas fa-play-circle"></i>
+                    Vídeos
+                </a>
             </div>
         </nav>
     </header>
 
     <main>
-        <section id="inicio" class="hero-section">
-            <div class="hero-content">
-                <h1 class="animate-on-scroll">Bem-vindo ao Meu Site</h1>
-                <p class="hero-text animate-on-scroll">Este é meu primeiro projeto de desenvolvimento web</p>
-                <button class="cta-button animate-on-scroll">Saiba Mais</button>
-            </div>
-        </section>
+        <div class="page-header">
+            <h1 class="section-title">Últimas Notícias</h1>
+            <div class="category-description">Fique por dentro das últimas novidades do mundo da tecnologia</div>
+        </div>
 
-        <section id="sobre" class="content-section">
-            <h2 class="animate-on-scroll">Sobre</h2>
-            <div class="cards-container">
-                <div class="card animate-on-scroll">
-                    <i class="fas fa-rocket"></i>
-                    <h3>Missão</h3>
-                    <p>Criar experiências web incríveis</p>
-                </div>
-                <div class="card animate-on-scroll">
-                    <i class="fas fa-eye"></i>
-                    <h3>Visão</h3>
-                    <p>Ser referência em desenvolvimento web</p>
-                </div>
-                <div class="card animate-on-scroll">
-                    <i class="fas fa-heart"></i>
-                    <h3>Valores</h3>
-                    <p>Qualidade, inovação e dedicação</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="servicos" class="content-section">
-            <h2 class="animate-on-scroll">Nossos Serviços</h2>
-            <div class="services-slider">
-                <div class="service-card">
-                    <i class="fas fa-code"></i>
-                    <h3>Desenvolvimento Web</h3>
-                    <p>Sites modernos e responsivos</p>
-                </div>
-                <div class="service-card">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>Design Responsivo</h3>
-                    <p>Adaptável a todos os dispositivos</p>
-                </div>
-                <div class="service-card">
-                    <i class="fas fa-search"></i>
-                    <h3>SEO</h3>
-                    <p>Otimização para buscadores</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="entretenimento" class="content-section entertainment-section">
-            <h2 class="animate-on-scroll">Área de Diversão</h2>
-            
-            <!-- Música -->
-            <div class="entertainment-container">
-                <div class="music-player animate-on-scroll">
-                    <h3><i class="fas fa-music"></i> Música do Momento</h3>
-                    <iframe style="border-radius:12px" 
-                            src="https://open.spotify.com/embed/playlist/37i9dQZF1DX0XUfTFmNBRM?utm_source=generator" 
-                            width="100%" 
-                            height="352" 
-                            frameBorder="0" 
-                            allowfullscreen="" 
-                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                            loading="lazy">
-                    </iframe>
-                </div>
-
-                <!-- Vídeos -->
-                <div class="video-player animate-on-scroll">
-                    <h3><i class="fas fa-video"></i> Vídeos em Destaque</h3>
-                    <div class="video-container">
-                        <iframe width="100%" 
-                                height="315" 
-                                src="https://www.youtube.com/embed/videoseries?list=PLDcpwPqrKS4vPxYo2oXYmBaYFRTCw1t-w" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
-                    </div>
-                </div>
-
-                <!-- Jogo -->
-                <div class="game-container animate-on-scroll">
-                    <h3><i class="fas fa-gamepad"></i> Mini Jogo</h3>
-                    <div class="game-area">
-                        <canvas id="gameCanvas" width="400" height="400"></canvas>
-                        <div class="game-controls">
-                            <button id="startGame" class="game-btn">Iniciar Jogo</button>
-                            <div class="game-score">Pontuação: <span id="score">0</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contato" class="content-section">
-            <h2 class="animate-on-scroll">Entre em Contato</h2>
-            <form class="contact-form" id="contactForm" action="https://formspree.io/f/xjkvoade" method="POST">
-                <div class="form-group">
-                    <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
-                    <span class="form-feedback"></span>
-                </div>
-                <div class="form-group">
-                    <input type="email" id="email" name="email" placeholder="Seu email" required>
-                    <span class="form-feedback"></span>
-                </div>
-                <div class="form-group">
-                    <textarea id="mensagem" name="mensagem" placeholder="Sua mensagem" required></textarea>
-                    <span class="form-feedback"></span>
-                </div>
-                <button type="submit" class="submit-btn">
-                    <span class="btn-text">Enviar</span>
-                    <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
-                </button>
-            </form>
-        </section>
+        <div class="news-container" id="newsContainer">
+            <!-- As notícias serão inseridas aqui dinamicamente -->
+        </div>
+        <div class="videos-container" id="videosContainer" style="display: none;">
+            <!-- Os vídeos serão inseridos aqui dinamicamente -->
+        </div>
     </main>
+
+    <div id="newsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">
+                <i class="fas fa-times"></i>
+            </span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
 
     <footer>
         <div class="footer-content">
-            <div class="social-links">
-                <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <div class="footer-logo">
+                <i class="fas fa-microchip"></i>
+                TechAI News
+            </div>
+            <div class="footer-text">
+                Seu portal de notícias sobre Tecnologia e IA
+            </div>
+            <div class="footer-social">
                 <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
             </div>
-            <div class="site-stats">
-                <p>Visitas hoje: <span id="todayVisits">0</span></p>
-                <p>Total de visitas: <span id="totalVisits">0</span></p>
-            </div>
-            <p>&copy; 2024 Meu Site. Todos os direitos reservados.</p>
+        </div>
+        <div class="footer-bottom">
+            2024 TechAI News - Todas as notícias sobre Tecnologia e IA
         </div>
     </footer>
 
