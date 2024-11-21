@@ -516,3 +516,23 @@ footer {
         height: auto;
     }
 }
+
+/* Estatísticas do Site */
+.site-stats {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.site-stats p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.site-stats span {
+    color: var(--accent-color);
+    font-weight: bold;
+    margin-left: 0.5rem;
+}

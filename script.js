@@ -372,3 +372,37 @@ startButton.addEventListener('click', () => {
     startButton.disabled = true;
     startButton.textContent = 'Jogando...';
 });
+
+// Sistema de contagem de visitas
+function updateVisitCount() {
+    // Obtém a data atual
+    const today = new Date().toLocaleDateString();
+    
+    // Recupera os dados do localStorage
+    let stats = JSON.parse(localStorage.getItem('siteStats')) || {
+        totalVisits: 0,
+        lastVisit: '',
+        todayVisits: 0
+    };
+    
+    // Verifica se é um novo dia
+    if (stats.lastVisit !== today) {
+        stats.todayVisits = 1;
+    } else {
+        stats.todayVisits++;
+    }
+    
+    // Atualiza as estatísticas
+    stats.totalVisits++;
+    stats.lastVisit = today;
+    
+    // Salva no localStorage
+    localStorage.setItem('siteStats', JSON.stringify(stats));
+    
+    // Atualiza a exibição
+    document.getElementById('todayVisits').textContent = stats.todayVisits;
+    document.getElementById('totalVisits').textContent = stats.totalVisits;
+}
+
+// Atualiza o contador quando a página carrega
+document.addEventListener('DOMContentLoaded', updateVisitCount);
