@@ -10,6 +10,7 @@ const videoWrapper = document.getElementById('video-wrapper');
 const closeButton = document.querySelector('.close-button');
 const navLinks = document.querySelectorAll('.nav-links a');
 const filterButtons = document.querySelectorAll('.filter-button');
+const languageButtons = document.querySelectorAll('.language-button');
 const sectionTitle = document.querySelector('.section-title');
 const categoryDescription = document.querySelector('.category-description');
 const prevPageButton = document.getElementById('prevPage');
@@ -20,6 +21,7 @@ const totalPagesSpan = document.getElementById('totalPages');
 // Estado atual
 let currentCategory = 'tech';
 let currentFilter = 'all';
+let currentLanguage = 'all';
 let currentPage = 1;
 
     
@@ -80,11 +82,20 @@ navLinks.forEach(link => {
         currentPage = 1;
         pageToken = '';
         currentFilter = 'all';
+        currentLanguage = 'all';
         
         // Reset filter buttons
         filterButtons.forEach(btn => {
             btn.classList.remove('active');
             if (btn.dataset.filter === 'all') {
+                btn.classList.add('active');
+            }
+        });
+
+        // Reset language buttons
+        languageButtons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.language === 'all') {
                 btn.classList.add('active');
             }
         });
@@ -98,11 +109,22 @@ filterButtons.forEach(button => {
     button.addEventListener('click', () => {
         filterButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
-        
         currentFilter = button.dataset.filter;
         currentPage = 1;
         pageToken = '';
-        loadVideos(currentCategory);
+        loadVideos(currentCategory, currentFilter, currentLanguage);
+    });
+});
+
+// Add language button event listeners
+languageButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        languageButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        currentLanguage = button.dataset.language;
+        currentPage = 1;
+        pageToken = '';
+        loadVideos(currentCategory, currentFilter, currentLanguage);
     });
 });
 
@@ -110,7 +132,7 @@ prevPageButton.addEventListener('click', () => {
     if (currentPage > 1) {
         currentPage--;
         pageToken = prevPageToken;
-        loadVideos(currentCategory);
+        loadVideos(currentCategory, currentFilter, currentLanguage);
     }
 });
 
@@ -118,7 +140,7 @@ nextPageButton.addEventListener('click', () => {
     if (currentPage < totalPages) {
         currentPage++;
         pageToken = nextPageToken;
-        loadVideos(currentCategory);
+        loadVideos(currentCategory, currentFilter, currentLanguage);
     }
 });
 
@@ -132,26 +154,10 @@ videoModal.addEventListener('click', (e) => {
     }
 });
 
-// Event Listeners para os filtros de linguagem
-document.querySelectorAll('.language-button').forEach(button => {
-    button.addEventListener('click', () => {
-        document.querySelectorAll('.language-button').forEach(b => b.classList.remove('active'));
-        button.classList.add('active');
-        
-        const language = button.dataset.language;
-        const category = document.querySelector('.nav-links a.active').dataset.category;
-        const filter = document.querySelector('.filter-button.active').dataset.filter;
-        
-        currentPageToken = '';
-        loadVideos(category, filter, language);
-    });
-});
-
 // Funções principais
 async function loadVideos(category, filter = 'all', language = 'all') {
-    showLoading();
-    
     try {
+        showLoading();
         const cacheKey = `${category}_${filter}_${language}_${pageToken}`;
         let videos;
 
@@ -167,56 +173,50 @@ async function loadVideos(category, filter = 'all', language = 'all') {
             cachedVideos[cacheKey] = videos;
         }
 
-        updatePagination();
-        displayVideos(videos);
+        if (videos && videos.length > 0) {
+            updatePagination();
+            displayVideos(videos);
+            
+            // Scroll to top after loading new videos
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        } else {
+            showError('Nenhum vídeo encontrado para esta categoria.');
+        }
     } catch (error) {
-        console.error('Erro ao carregar vídeos:', error);
+        console.error('Error loading videos:', error);
         showError();
     }
 }
 
 function getSearchQueryForCategory(category, filter = 'all', language = 'all') {
-    let baseQuery = CATEGORIES[category].searchQuery;
-    
-    if (category === 'programming') {
-        baseQuery = 'aulas curso programacao';
-        
-        if (language !== 'all') {
-            baseQuery += ` ${language}`;
-        }
-        
-        switch(filter) {
-            case 'beginner':
-                baseQuery += ' iniciante básico';
-                break;
-            case 'intermediate':
-                baseQuery += ' intermediário';
-                break;
-            case 'advanced':
-                baseQuery += ' avançado';
-                break;
-            case 'tutorials':
-                baseQuery += ' tutorial';
-                break;
-            case 'news':
-                baseQuery += ' novidades atualizações';
-                break;
-        }
-    } else {
-        switch(filter) {
-            case 'news':
-                baseQuery += ' notícias';
-                break;
-            case 'tutorials':
-                baseQuery += ' tutorial';
-                break;
-            case 'reviews':
-                baseQuery += ' review análise';
-                break;
-        }
+    let query = CATEGORIES[category].searchQuery;
+
+    if (language !== 'all') {
+        query += ` ${language} programming`;
     }
-    
-    return baseQuery + ' portugues';
+
+    switch (filter) {
+        case 'beginner':
+            query += ' iniciante tutorial';
+            break;
+        case 'intermediate':
+            query += ' intermediário';
+            break;
+        case 'advanced':
+            query += ' avançado';
+            break;
+        case 'news':
+            query += ' notícias';
+            break;
+        case 'tutorials':
+            query += ' tutorial';
+            break;
+    }
+
+    return query;
 }
 
 async function fetchYouTubeVideos(query) {
