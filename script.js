@@ -1,5 +1,5 @@
-// Configuração da API do YouTube
-const YOUTUBE_API_KEY = 'AIzaSyA3bjXPkJ6VesGq64sodSXQwL-XfYtDOok';
+// Configurações da aplicação
+const YOUTUBE_API_KEY = window.config.YOUTUBE_API_KEY;
 const RESULTS_PER_PAGE = 12;
 const MAX_RESULTS = 50;
 
